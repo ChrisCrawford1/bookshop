@@ -17,7 +17,8 @@ db.authenticate()
 app.use(express.json()); 
 app.use(express.urlencoded({extended: false}));
 
-app.use('/auth/', require('./routes/auth'));
+app.use('/auth', require('./routes/auth'));
+app.use('/books', require('./routes/books'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

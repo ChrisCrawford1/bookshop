@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 // Register a new user
 router.post('/register', async (req, res) => {
@@ -60,11 +61,15 @@ router.post('/login', async (req, res) => {
     const passwordsMatch = await bcrypt.compare(data.password, user.password);
 
     if (passwordsMatch) {
+        // set token to expire in 5 minutes
+        const token = jwt.sign({user}, 'secretkey', {expiresIn: '300s'});
+
         return res.json({
             name: user.name,
             email: user.email,
             createdAt: user.createdAt,
-            updatedAt: user.updatedAt
+            updatedAt: user.updatedAt,
+            token: token
         }); 
     }
 
@@ -72,6 +77,5 @@ router.post('/login', async (req, res) => {
         message: 'Invalid password!'
     })
 });
-
 
 module.exports = router;
