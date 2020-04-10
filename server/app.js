@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const db = require('./config/database');
+const secret = require('./helpers/secret');
 
 db.authenticate()
     .then(() => {
@@ -11,6 +12,9 @@ db.authenticate()
     .catch(err => {
         console.log(err);
     });
+
+secret.then(res => app.set('app_secret', res));
+
 
 /** Middlewares */
 // Body Parser

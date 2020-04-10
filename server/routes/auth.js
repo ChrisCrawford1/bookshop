@@ -62,7 +62,7 @@ router.post('/login', async (req, res) => {
 
     if (passwordsMatch) {
         // set token to expire in 5 minutes
-        const token = jwt.sign({user}, 'secretkey', {expiresIn: '300s'});
+        const token = jwt.sign({user}, req.app.get('app_secret'), {expiresIn: '300s'});
 
         return res.json({
             name: user.name,
