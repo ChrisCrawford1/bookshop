@@ -32,4 +32,24 @@ router.get('/:id', validateToken, (req, res) => {
     });
 });
 
+// Delete a book
+router.post('/delete/:id', validateToken, (req, res) => {
+    jwt.verify(req.token, req.app.get('app_secret'), async (err, user) => {
+        if (err) {
+            return res.sendStatus(401);
+        }
+
+        try {
+            await Book.destroy({
+                where: {
+                    id: req.params.id
+                }
+            });
+            return res.sendStatus(204);
+        } catch {
+            return res.sendStatus(500)
+        }
+    })
+})
+
 module.exports = router;
